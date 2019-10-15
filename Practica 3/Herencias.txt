@@ -1,0 +1,115 @@
+
+TP.PR2.CONTROL
+
+	--CONTROLLER.JAVA--
+	
+		//clase para controlar la ejecución del juego, preguntando al usuario quÃ©
+		//quiere hacer y actualizando la partida de acuerdo a lo que éste indique
+		
+		private Game game;
+		private Scanner in;
+		private boolean printGameState;
+	
+	
+		Controller(Game game, Scaner in); //Constructor del controlador que recibe la partida y una entrada. 
+										  //Setea el game y el in y activa el GameState a true
+		
+		Run(); //Ejecuta la simulación del juego. Imprime el game si gameState está a true.
+			   //Parsea el comando, y si el juego no está acabado, comprobará si el comando es valido o null.
+			   //Si es null sigue pidiendo comando, si es valido ejecuta el comando.
+			   
+	   public boolean isPrintGameState(); //Pregunta el estado de stategame (true or false)
+		
+		public void setPrintGameState(boolean printGameState); //Setea Stategame
+		
+		public void setGame(Game gameNew); //Setea el game.
+	
+TP.PR2.CONTROL.COMMANDS
+
+	--COMMAND.JAVA--
+	
+	    private String helpText;//Texto del comando que aparecera al escribir help.
+		private String commandText;//texto con la info del comando dada x el usuario
+		protected final String commandName;//Nombre del comando
+		
+		public Command(String commandInfo, String helpInfo); //Constructora que setea el helptext con la helpinfo y el command text con el commandinfo
+															// coge la primera palabra de commandText para saber el nombre del comando.
+		public abstract void execute(Game game, Controller controller);//implementarán los comandos su ejecución y su parseo.
+		public abstract Command parse(String[] commandWords, Controller controller);// lomismo
+		public String helpText();//imprime el helpText del comando. Genérico para cada comando.
+	
+	--COMMANDPARSER.JAVA--
+	
+		//Se encarga de saber si el usuario ha escrito correctamente el comando.
+	    private static Command[] availablerCommands = { new HelpCommand(), new ResetCommand(), new ExitCommand(), new MoveCommand(), new UndoCommand(),new RedoCommand(), new PlayCommand()}
+	    //lista de comandos	
+		public static Command parseCommand(String[] commandWords, Controller controller) //compara con la lista
+		public static void commandHelp() //Para cada comando imprime su ayuda
+		
+	--EXITCOMMAND.JAVA-- extends command
+	
+	    public abstract void execute(Game game, Controller controller); //Setea gamestate a falso e imprime un mensaje de salida.
+	
+	--GAMETYPE.JAVA-- //Clase que contiene los enumerados con los distintos tipos de juegos con sus reglas
+	
+	--HELPCOMMAND.JAVA-- extend command
+	
+	    public abstract void execute(Game game, Controller controller); //Llama al help de commandparser.
+	    
+	--MOVECOMMAND.JAVA-- extends command
+	
+		public MoveCommand(String[] commandInfo) // Crea el comando con el tipo de direccion para que lo de a execute cogiendo el [1] de commandInfo
+		
+	    public abstract void execute(Game game, Controller controller); //Ejecuta el movimiento con la direccion indicada game.move(dir);
+	    
+	    public Command parse(String[] commandWords, Controller controller); //Reescribe el parseo de CommandParse, parsea el comando para saber si es suyo y le devuelve con el tipo de direccion
+	    																	// Compara con "move" y las direcciones.
+	    																	
+	--NOPARAMSCOMMAND.JAVA-- extends command  //Clase que aprsea los comandos sin parámetros 
+	
+	   public Command parse(String[] commandWords, Controller controller) //Compara el [0] con el comando referencia sobre el que se ejecuta.
+	   
+	--PLAYCOMMAND.JAVA-- extends command //Se encarga de cambiar entre juegos
+	
+		private final static String commandName="play";
+		private final static String helpCommand="start a new game of one of the game types: original, fib, inverse.";
+		protected int randomSeed, boardSize, initialCells;
+		protected GameType gameType;
+	    
+	    public PlayCommand(String[] commandInfo)//De commandInfo saca de [0] el tipo, original fib o inv. lo setea con gameType
+	    
+	    public abstract void execute(Game game, Controller controller); //Ejecuta el comando play pidiendo el tamaÃ±o, numero de celdas y la semilla y crea una nueva partida
+	    
+	    
+	--REDOCOMMAND.JAVA-- extends command
+	
+	    public abstract void execute(Game game, Controller controller); //Ejecuta game.Redo
+	    
+	    
+	--RESETCOMMAND.JAVA-- extends command
+	
+	    public abstract void execute(Game game, Controller controller); //Ejecuta game.Reset
+	    
+	    
+	--UNDOCOMMAND.JAVA-- extends command
+	
+	    public abstract void execute(Game game, Controller controller); //Ejecuta game.Undo
+	    
+TP.PR2.LOGIC.MULTIGAMES
+
+	--BOARD.JAVA--
+	--CELL.JAVA--
+	--DIRECTION.JAVA--
+	--GAME.JAVA--
+	--GAME2048.JAVA--
+	--GAMERULES.JAVA--
+	--GAMESTATE.JAVA--
+	--GAMESTATESTACK.JAVA--
+	--MOVERESULTS.JAVA--
+	--POSITION.JAVA--
+	--RULES2048.JAVA--
+	--RULESFIB.JAVA--
+	--RULESINVERSE.JAVA--
+TP.PR2.UTIL
+
+	--MY MATHS UTIL.JAVA-- //Proporcionado por profesor.
